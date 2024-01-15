@@ -7,7 +7,6 @@ We are processing weather data, especially about wind direction distribution her
 ## Raw Data
 
 ```Python
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -18,7 +17,7 @@ import numpy as np
 df = pd.read_csv('wind_data.csv')
 
 # Convert 'datetime' to datetime objects
-df['datetime'] = pd.to_datetime(df['datetime'], format='%Y-%m-%d')
+df['datetime'] = pd.to_datetime(df['datetime'], format='\%Y-\%m-\%d')
 
 # Task 1: Plot the raw wind direction data as a smooth curve
 plt.figure(figsize=(12, 6))
@@ -43,6 +42,7 @@ plt.show()
 ```
 
 ![image_20240115_182900.png](image_20240115_182900.png)
+
 
 ## Moving Average
 
@@ -81,9 +81,13 @@ plt.legend()
 plt.show()
 
 ```
+
 ![image_20240115_183200.png](image_20240115_183200.png)
+
 ![image_20240115_183201.png](image_20240115_183201.png)
+
 ![image_20240115_183202.png](image_20240115_183202.png)
+
 
 ## Sector Frequency Diagram
 
