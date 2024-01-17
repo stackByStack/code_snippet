@@ -6,12 +6,14 @@
                  name="Code Snippets"
                  start-page="Overview.md">
 
+    <toc-element topic="Python-Transformer.md"/>
     <toc-element topic="Overview.md"/>
     <toc-element topic="DataAnalysis.md">
         <toc-element topic="MovingAverage-SectorFrequencyDiagram.md"/>
     </toc-element>
     <toc-element topic="OJ.md">
         <toc-element topic="Leetcode.md">
+            <toc-element topic="Longest-Palindromic-Substring.md"/>
             <toc-element topic="longest-substring-without-repeating-characters.md"/>
         </toc-element>
     </toc-element>
