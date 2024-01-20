@@ -12,6 +12,11 @@
         <toc-element topic="MovingAverage-SectorFrequencyDiagram.md"/>
     </toc-element>
     <toc-element topic="OJ.md">
+        <toc-element topic="Knowledge.md">
+            <toc-element topic="图论.md">
+                <toc-element topic="连通分量.md"/>
+            </toc-element>
+        </toc-element>
         <toc-element topic="Leetcode.md">
             <toc-element topic="Longest-Palindromic-Substring.md"/>
             <toc-element topic="longest-substring-without-repeating-characters.md"/>
