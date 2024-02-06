@@ -38,3 +38,71 @@ predictions = ort_session.run(None, inputs)
 
 ## Conclusion
 **ONNX** provides a robust and broadly embraced format for model sharing between different **AI frameworks**, granting the capacity to reuse models regardless of the training tools used. **ONNX** has become the go-to solution for those looking to mitigate the clash of different ML frameworks and maintain **interoperability** in their projects.
+
+
+## Example Code
+### export_onnx.py
+```Python
+import torch
+import timm
+
+def export_onnx(model, output_dir:str):
+    # Create a dummy input to the model
+    dummy_input = torch.randn(1, 3, 224, 224)
+
+    # Export the model to ONNX format
+    torch.onnx.export(model, dummy_input, f"{output_dir}/model1.onnx")
+    
+
+# param parser
+import argparse
+parser = argparse.ArgumentParser(description='Export a model to ONNX format')
+parser.add_argument('--ckpt_path', type=str, help='Path to the model checkpoint')
+parser.add_argument('--model', type=str, help='Name of the model to load from timm')
+# parser.add_argument('--num_classes', type=int, help='Number of classes in the model')
+parser.add_argument('--output_dir', type=str, help='Directory to save the ONNX model')
+# whether is timm
+# parser.add_argument('--is_timm', type=int, help='Whether the model is from timm, 1 is true, 0 is false')
+args = parser.parse_args()
+
+from timm import create_model
+import model
+import utils
+
+model = create_model(args.model, distillation=True)
+if args.ckpt_path:
+    model.load_state_dict(torch.load(args.ckpt_path)['model'])
+    
+# utils.replace_batchnorm(model)
+# model.eval()
+    
+export_onnx(model, args.output_dir)
+```
+
+**How to use**
+```Bash
+python export_onnx.py --ckpt_path pretrain/repvit_m0_9_distill_300e.pth --output_dir onnx_output --model repvit_m0_9
+```
+
+### onnx_inference.py (GPU)
+```Python
+import onnxruntime
+import torch
+
+# Initialize the CUDA device if available
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print('Using device:', device)
+
+# Load the ONNX model onto the GPU
+ort_session = onnxruntime.InferenceSession("onnx_output/model.onnx", providers=['CUDAExecutionProvider'])
+
+# Initialize example input with 1*3*224*224 on the GPU
+example = torch.rand(1, 3, 224, 224).to(device)
+
+for i in range(100):
+    # Compute ONNX Runtime output prediction on the GPU
+    ort_inputs = {ort_session.get_inputs()[0].name: example.detach().cpu().numpy()}  # Move the input back to the CPU
+    ort_outs = ort_session.run(None, ort_inputs)
+    print(ort_outs[0])
+
+```
